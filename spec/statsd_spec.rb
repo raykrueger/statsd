@@ -6,8 +6,8 @@ describe Statsd do
   end
 
   before do
-    @statsd = Statsd.new('localhost', 1234)
     @socket = Thread.current[:statsd_socket] = FakeUDPSocket.new
+    @statsd = Statsd.new('localhost', 1234, @socket)
   end
 
   after { Thread.current[:statsd_socket] = nil }

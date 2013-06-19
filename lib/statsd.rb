@@ -106,6 +106,9 @@ class Statsd
   # a postfix to append to all metrics
   attr_reader :postfix
 
+  # a simple accessor to the socket instance
+  attr_reader :socket
+
   class << self
     # Set to a standard logger instance to enable debug logging.
     attr_accessor :logger
@@ -113,11 +116,12 @@ class Statsd
 
   # @param [String] host your statsd host
   # @param [Integer] port your statsd port
-  def initialize(host = '127.0.0.1', port = 8125)
+  def initialize(host = '127.0.0.1', port = 8125, socket = UDPSocket.new)
     self.host, self.port = host, port
     @prefix = nil
     @batch_size = 10
     @postfix = nil
+    @socket = socket
   end
 
   # @attribute [w] namespace
@@ -267,9 +271,5 @@ class Statsd
       rate = "|@#{sample_rate}" unless sample_rate == 1
       send_to_socket "#{prefix}#{stat}#{postfix}:#{delta}|#{type}#{rate}"
     end
-  end
-
-  def socket
-    Thread.current[:statsd_socket] ||= UDPSocket.new
   end
 end
