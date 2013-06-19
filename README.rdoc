@@ -10,15 +10,15 @@ Bundler:
 = Basic Usage
 
   # Set up a global Statsd client for a server on localhost:9125
-  $statsd = Statsd.new 'localhost', 9125
+  statsd = Statsd.new 'localhost', 9125
 
   # Send some stats
-  $statsd.increment 'garets'
-  $statsd.timing 'glork', 320
-  $statsd.gauge 'bork', 100
+  statsd.increment 'garets'
+  statsd.timing 'glork', 320
+  statsd.gauge 'bork', 100
 
   # Use {#time} to time the execution of a block
-  $statsd.time('account.activate') { @account.activate! }
+  statsd.time('account.activate') { @account.activate! }
 
   # Create a namespaced statsd client and increment 'account.activate'
   statsd = Statsd.new('localhost').tap{|sd| sd.namespace = 'account'}
